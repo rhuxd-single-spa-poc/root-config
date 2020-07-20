@@ -19,8 +19,11 @@ const layoutEngine = constructLayoutEngine({
 
 applications.forEach(registerApplication);
 
-System.import("@react-mf/styleguide").then(() => {
-  // Activate the layout engine once the styleguide CSS is loaded
-  layoutEngine.activate();
-  start();
-});
+layoutEngine.activate();
+start();
+
+// System.import("@react-mf/styleguide").then(() => {
+//   // Activate the layout engine once the styleguide CSS is loaded
+//   layoutEngine.activate();
+//   start();
+// });
