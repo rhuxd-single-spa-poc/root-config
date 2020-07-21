@@ -5,11 +5,38 @@ import {
 } from "single-spa-layout";
 import { registerApplication, start } from "single-spa";
 
+registerApplication({
+  name: "@react-mf/navigation",
+  app: () => System.import("@react-mf/navigation"),
+  activeWhen: "/",
+});
+
+registerApplication({
+  name: "@react-mf/apicurio-studio",
+  app: () => System.import("@react-mf/apicurio-studio"),
+  activeWhen: "/apicuriostudio",
+});
+
+// registerApplication({
+//   name: "@react-mf/syndesis",
+//   app: () => loadWithoutAmd("@react-mf/syndesis"),
+//   activeWhen: "/syndesis",
+// });
+
+// function loadingFn() {
+//   return System.import('@react-mf/navigation');
+// }
+
+System.import("@react-mf/navigation");
+System.import("@react-mf/apicurio-studio");
+// System.import('@react-mf/syndesis');
+
 const routes = constructRoutes(document.querySelector("#single-spa-layout"));
 const applications = constructApplications({
   routes,
   loadApp: ({ name }) => System.import(name),
 });
+
 // Delay starting the layout engine until the styleguide CSS is loaded
 const layoutEngine = constructLayoutEngine({
   routes,
@@ -17,7 +44,7 @@ const layoutEngine = constructLayoutEngine({
   active: false,
 });
 
-applications.forEach(registerApplication);
+// applications.forEach(registerApplication);
 
 layoutEngine.activate();
 start();

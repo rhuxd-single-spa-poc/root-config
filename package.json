@@ -30,10 +30,14 @@
     "serve": "^11.3.0",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3"
+    "webpack-config-single-spa": "^1.10.0",
+    "webpack-config-single-spa-react": "^1.10.0",
+    "webpack-dev-server": "^3.10.3",
+    "webpack-merge": "^5.0.9"
   },
   "dependencies": {
     "single-spa": "^5.3.4",
-    "single-spa-layout": "^1.0.0-beta.2"
+    "single-spa-layout": "^1.0.0-beta.2",
+    "systemjs-webpack-interop": "^2.1.1"
   }
 }
