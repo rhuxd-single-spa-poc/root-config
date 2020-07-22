@@ -8,13 +8,14 @@
   <meta name="importmap-type" content="systemjs-importmap" />
   <script type="systemjs-importmap" src="https://storage.googleapis.com/react.microfrontends.app/importmap.json"></script>
   <script type="systemjs-importmap">
+    <% if (isLocal) { %>
     {
       "imports": {
         "@react-mf/root-config": "//localhost:9000/react-mf-root-config.js",
-        "@react-mf/apicurio-studio": "//localhost:9000/apicuriostudio",
         "@react-mf/navigation": "//localhost:9000"
       }
     }
+    <% } %>
   </script>
   <script src="https://cdn.jsdelivr.net/npm/import-map-overrides/dist/import-map-overrides.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/systemjs/dist/system.min.js"></script>
@@ -27,9 +28,9 @@
       </nav>
       <a href="/apicuriostudio">HI</a>
       <div>
-        <route path="/apicuriostudio">
+        <!-- <route path="/apicuriostudio">
           <application name="@react-mf/apicurio-studio"></application>
-        </route>
+        </route> -->
         <!-- <route path="syndesis">
           <application name="@react-mf/syndesis"></application>
         </route> -->
@@ -45,7 +46,7 @@
 <body>
   <script>
     System.import('@react-mf/root-config');
-    System.import('@react-mf/apicurio-studio');
+    System.import('@react-mf/navigation');
     // System.import('@react-mf/styleguide');
   </script>
   <import-map-overrides-full show-when-local-storage="devtools" dev-libs></import-map-overrides-full>
