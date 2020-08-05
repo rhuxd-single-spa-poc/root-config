@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "webpack-dev-server --mode=development --port 9000 --env.isLocal=true",
+    "serve": "webpack-dev-server",
+    "start": "node server.js",
     "lint": "eslint src",
     "test": "jest --passWithNotests",
     "format": "prettier --write './**'",
