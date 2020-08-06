@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>React Microfrontends</title>
   <meta name="importmap-type" content="systemjs-importmap" />
-  <script type="systemjs-importmap" crossorigin='anonymous' src="http://nginx-ddonahue.apps.ocp4.patternfly.org/importmap.json"></script>
+  <script type="systemjs-importmap" crossorigin='anonymous' src="http://nginx-cmolloy.apps.ocp4.patternfly.org/importmap.json"></script>
   <% if (isLocal) { %>
   <script type="systemjs-importmap">
     {
@@ -23,7 +23,7 @@
   <template id="single-spa-layout">
     <single-spa-router>
       <nav class="topnav">
-        <application name="@react-mf/navbar"></application>
+        <application name="@react-mf/navigation"></application>
       </nav>
       <div class="main-content mt-16">
         <route path="react-app-1">
