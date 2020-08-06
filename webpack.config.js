@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = (env) => {
   const result = {
-    entry: path.resolve(__dirname, "src/root-config"),
+    entry: path.resolve(__dirname, "./src/root-config"),
     output: {
       filename: "react-mf-root-config.js",
       libraryTarget: "system",

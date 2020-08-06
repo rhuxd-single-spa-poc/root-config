@@ -2,10 +2,10 @@
   "scripts": {
     "serve": "webpack-dev-server",
     "start": "node server.js",
+    "build": "webpack --config webpack.config.js -p",
     "lint": "eslint src",
     "test": "jest --passWithNotests",
-    "format": "prettier --write './**'",
-    "build": "webpack --mode=production"
+    "format": "prettier --write './**'"
   },
   "husky": {
     "hooks": {
