@@ -5,7 +5,8 @@
     "build": "webpack --config webpack.config.js -p",
     "lint": "eslint src",
     "test": "jest --passWithNotests",
-    "format": "prettier --write './**'"
+    "format": "prettier --write './**'",
+    "push": "yarn build && scripts/push.sh"
   },
   "husky": {
     "hooks": {
