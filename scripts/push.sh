@@ -15,7 +15,11 @@ dd-oc() {
 
 # push the dist directory up to given location
 deploy() {
-  local _repo=$(git remote get-url origin | sed 's|:|/|; s|git@|https://|')
+  local _repo=$(git remote get-url origin)
+  if [[ ${_repo} == git@* ]]; then
+    _repo=$(echo ${_repo} |sed 's|:|/|; s|git@|https://|')
+  fi
+
   local _branch=$(git branch --show-current)
   local _url=${_repo}\#${_branch}
 
