@@ -3,47 +3,33 @@
 DIR=$(dirname "$0")
 source ${DIR}/common/logger.sh
 
-VERSION=${VERSION:-$(git rev-parse HEAD)}
-DIST_DIR=dist
-FILENAME=react-mf-root-config.js
+dd-oc() {
+  if [ -z "${NAMESPACE}" ]; then
+    log-error "you must set the NAMESPACE variable in your environment"
+    exit 1
+  fi
 
-if [ -z "${NAMESPACE}" ]; then
-  log-err "You must set NAMESPACE in you environment!
-  example:
-          export NAMESPACE=foobar"
-  exit 1
-fi
+  log-info "oc --namespace ${NAMESPACE} $@"
+  oc --namespace ${NAMESPACE} "$@"
+}
 
 # push the dist directory up to given location
 deploy() {
-  local _resource_host=$(oc --namespace ${NAMESPACE} get route --selector=app=nginx -o=jsonpath={.items..status.ingress..host})
-  local _pod_name=$(oc --namespace ${NAMESPACE} get pods --selector=app=nginx --field-selector=status.phase=Running -o=jsonpath={.items..metadata.name})
-  log-debug "POD NAME: ${_pod_name}"
+  local _repo=$(git remote get-url origin | sed 's|:|/|; s|git@|https://|')
+  local _branch=$(git branch --show-current)
+  local _url=${_repo}\#${_branch}
 
-  log-info "uploading version: ${VERSION}"
-  log-debug "tar cvf - ${VERSION} | oc --namespace ${NAMESPACE} rsh ${_pod_name} tar xofC - /usr/share/nginx/html"
-  cd ${DIST_DIR}
-  tar cvf - ${VERSION} | oc --namespace ${NAMESPACE} rsh ${_pod_name} tar xofC - /usr/share/nginx/html --warning=no-timestamp
-  log-info "NEW RESOURCE CRETATED: http://${_resource_host}/${VERSION}/${FILENAME}"
-  cd ..
+  log-info "Deploying From: ${_url}"
+  dd-oc new-app openshift/nodejs:12~${_url} --name="root-config" && \
+  dd-oc expose svc/root-config
 }
 
-copyDist() {
-  if [ -d ${DIST_DIR}/${VERSION} ]; then
-    rm -rf ${DIST_DIR}/${VERSION}
+undeploy() {
+  if dd-oc get pod --selector app=root-config > /dev/null 2>&1; then
+    dd-oc delete all --selector app=root-config
   fi
-
-  log-debug "rsync -avr --exclude="${DIST_DIR}/${VERSION}" ${DIST_DIR}/* ${DIST_DIR}/${VERSION}/"
-  rsync -avr --exclude="${DIST_DIR}/${VERSION}" ${DIST_DIR}/* ${DIST_DIR}/${VERSION}/
-}
-
-clean() {
-  log-debug "rm -rf ${DIST_DIR}/${VERSION}/"
-  rm -rf ${DIST_DIR}/${VERSION}/
 }
 
 # execute
-clean
-copyDist
+undeploy
 deploy
-clean
