@@ -29,12 +29,12 @@ deploy() {
   log-info "Deploying From: ${_url}"
   if dd-oc get pods |grep ${APP_NAME} > /dev/null 2>&1; then
     # do this if we are updating deployment
-    log-info "New Deployment"
+    log-info "Update Existing Deployment"
     dd-oc start-build ${APP_NAME}
     dd-oc rollout latest dc/${APP_NAME}
   else
     # do this for new deployment
-    log-info "Update Existing Deployment"
+    log-info "New Deployment"
     dd-oc new-app openshift/nodejs:12~${_url} --name=${APP_NAME} && \
     dd-oc expose svc/${APP_NAME}
   fi
