@@ -3,6 +3,9 @@
 DIR=$(dirname "$0")
 source ${DIR}/common/logger.sh
 
+USAGE="Usage: "`basename $0`" [deploy|undeploy]"
+APP_NAME=root-config
+
 dd-oc() {
   if [ -z "${NAMESPACE}" ]; then
     log-error "you must set the NAMESPACE variable in your environment"
@@ -24,16 +27,34 @@ deploy() {
   local _url=${_repo}\#${_branch}
 
   log-info "Deploying From: ${_url}"
-  dd-oc new-app openshift/nodejs:12~${_url} --name="root-config" && \
-  dd-oc expose svc/root-config
+  if dd-oc get pods |grep ${APP_NAME} > /dev/null 2>&1; then
+    # do this if we are updating deployment
+    log-info "New Deployment"
+    dd-oc start-build ${APP_NAME}
+    dd-oc rollout latest dc/${APP_NAME}
+  else
+    # do this for new deployment
+    log-info "Update Existing Deployment"
+    dd-oc new-app openshift/nodejs:12~${_url} --name=${APP_NAME} && \
+    dd-oc expose svc/${APP_NAME}
+  fi
 }
 
 undeploy() {
-  if dd-oc get pod --selector app=root-config > /dev/null 2>&1; then
-    dd-oc delete all --selector app=root-config
+  if dd-oc get pods |grep ${APP_NAME} > /dev/null 2>&1; then
+    dd-oc delete all --selector app=${APP_NAME}
   fi
 }
 
 # execute
-undeploy
-deploy
+case $1 in
+  undeploy)
+    undeploy
+  ;;
+  deploy)
+    deploy
+  ;;
+  *)
+    echo ${USAGE}
+  ;;
+esac
